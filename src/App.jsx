@@ -120,7 +120,7 @@ function App() {
         {scoreComputer > scoreUser && cards.isFinished
           ? "COMPUTER WON THIS GAME!!!!"
           : scoreComputer < scoreUser && cards.isFinished
-          ? "I WON THIS GAME!!!!"
+          ? "USER WON THIS GAME!!!!"
           : scoreComputer == scoreUser && cards.isFinished
           ? "TIE!!!!"
           : "WAR!"}
@@ -133,7 +133,7 @@ function App() {
           </div>
         </div>
         <div className="slot-container">
-          <p className="me-paragraph">Me: {scoreUser}</p>
+          <p className="me-paragraph">User: {scoreUser}</p>
           <div className="card-slot">
             <img src={cards.UserCardImg} alt="" />
           </div>
