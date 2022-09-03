@@ -1,8 +1,8 @@
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 
 function App() {
+  // Variable to control cards from API
   const [cards, setCards] = useState({
     remainingCards: "",
     ComputerCardImg: "",
@@ -13,6 +13,8 @@ function App() {
     isPlaying: false,
     isFinished: false,
   });
+
+  //Variables to control score
   const [scoreComputer, setScoreComputer] = useState(0);
   const [scoreUser, setScoreUser] = useState(0);
 
@@ -31,34 +33,47 @@ function App() {
             ...cards,
             ComputerCardImg: data.cards[0].image,
             UserCardImg: data.cards[1].image,
-            remainingCards: data.remaining - 30,
+            remainingCards: data.remaining - 42,
             ComputerCard: data.cards[0].value,
             UserCard: data.cards[1].value,
             isPlaying: true,
           });
         });
     } else {
-      console.log("Please, shuffle the deck first");
+      document.getElementById("draw-btn").innerText = "First, shuffle the deck";
+      setTimeout(() => {
+        document.getElementById("draw-btn").innerText = "DRAW";
+      }, 1000);
     }
   }
 
   useEffect(() => {
     getWinner(cards.ComputerCard, cards.UserCard);
     finishGame(cards.remainingCards, cards.isPlaying);
-  }, [cards]);
+  }, [cards.remainingCards]);
 
   function getWinner(cardPC, cardMe) {
-    cardPC == "JACK" ? (cardPC = 11) : cardPC;
-    cardPC == "QUEEN" ? (cardPC = 12) : cardPC;
-    cardPC == "KING" ? (cardPC = 13) : cardPC;
-    cardPC == "ACE" ? (cardPC = 1) : cardPC;
-    cardMe == "JACK" ? (cardMe = 11) : cardMe;
-    cardMe == "QUEEN" ? (cardMe = 12) : cardMe;
-    cardMe == "KING" ? (cardMe = 13) : cardMe;
-    cardMe == "ACE" ? (cardMe = 1) : cardMe;
-    if (Number(cardPC) > Number(cardMe)) {
+    const valueOptions = [
+      "ACE",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "JACK",
+      "QUEEN",
+      "KING",
+    ];
+    const cardPCIndex = valueOptions.indexOf(cardPC);
+    const cardMeIndex = valueOptions.indexOf(cardMe);
+    console.log(cardPCIndex, cardMeIndex);
+    if (cardPCIndex > cardMeIndex) {
       setScoreComputer(scoreComputer + 1);
-    } else if (Number(cardPC) < Number(cardMe)) {
+    } else if (cardPCIndex < cardMeIndex) {
       setScoreUser(scoreUser + 1);
     }
   }
@@ -66,9 +81,10 @@ function App() {
   function finishGame(remainingCards, isPlaying) {
     if (remainingCards == 0 && isPlaying) {
       setCards({
+        ...cards,
         isFinished: true,
+        isPlaying: false,
       });
-      document.getElementById("");
     }
   }
 
@@ -90,14 +106,25 @@ function App() {
   return (
     <div className="App">
       <div>
-        <button onClick={newDeck} className="btn shuffle">
+        <button
+          onClick={cards.isFinished ? resetGame : newDeck}
+          className="btn shuffle"
+        >
           Shuffle Deck
         </button>
         <span className="remaining">
           Remaining cards: {cards.remainingCards || 0}{" "}
         </span>
       </div>
-      <h1 className="title">War!</h1>
+      <h1 id="title" className="title">
+        {scoreComputer > scoreUser && cards.isFinished
+          ? "COMPUTER WON THIS GAME!!!!"
+          : scoreComputer < scoreUser && cards.isFinished
+          ? "I WON THIS GAME!!!!"
+          : scoreComputer == scoreUser && cards.isFinished
+          ? "TIE!!!!"
+          : "WAR!"}
+      </h1>
       <div className="main-container">
         <div className="slot-container">
           <p>Computer: {scoreComputer}</p>
@@ -118,8 +145,9 @@ function App() {
       <button
         onClick={cards.isFinished ? resetGame : drawCards}
         className="btn draw"
+        id="draw-btn"
       >
-        {cards.isFinished ? "GAME FINISHED!! RESTART THE GAME" : "Draw"}
+        {cards.isFinished ? "RESTART" : "Draw"}
       </button>
     </div>
   );

@@ -1,5 +1,5 @@
 body {
-  background-image: url("./assets/table.png");
+  background-image: url("./assets/table1.png");
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -101,5 +101,13 @@ body {
 
   .me-paragraph {
     order: 1;
+  }
+}
+
+@media (orientation: landscape) {
+  .title {
+    margin: 0.5em 0 -0.5em 0;
+    font-size: 1.5em;
+    color: yellow;
   }
 }
