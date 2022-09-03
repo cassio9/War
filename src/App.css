@@ -1,0 +1,105 @@
+body {
+  background-image: url("./assets/table.png");
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  color: #f1f1f1;
+  letter-spacing: 0.1rem;
+  font-size: 1.2em;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.remaining {
+  display: inline;
+  margin-left: 1em;
+}
+
+.title {
+  text-align: center;
+  margin: 0.5em 0;
+}
+
+.btn {
+  font-size: 1.1em;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  background-color: yellow;
+  border: 0;
+}
+
+.shuffle {
+  padding: 0.3em;
+  border-radius: 0 10px;
+  align-self: flex-start;
+}
+
+.draw {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-transform: uppercase;
+  font-weight: 900;
+  letter-spacing: 0.3em;
+  padding: 1em;
+}
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.slot-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.card-slot {
+  height: 119px;
+  border: 1px solid black;
+  width: calc(120px * 5 / 7);
+  margin: 0 auto;
+  order: 1;
+  border-radius: 5px;
+}
+
+.card-slot img {
+  height: 120px;
+}
+
+.me-paragraph {
+  order: 2;
+}
+
+.startWarning {
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 2em;
+  left: 1em;
+  color: yellow;
+  max-width: 100px;
+}
+
+@media (max-height: 650px) {
+  .main-container {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10%;
+  }
+
+  .me-paragraph {
+    order: 1;
+  }
+}
