@@ -3,6 +3,7 @@ import { getWinner } from "./utils.js";
 import "./App.css";
 
 function App() {
+  const [deckCards, setDeckCards] = useState("");
   const [cards, setCards] = useState({
     round: 0,
     remainingRounds: 5,
@@ -26,7 +27,7 @@ function App() {
         `https://deckofcardsapi.com/api/deck/${deckId.deck_id}/draw/?count=52`
       );
       const data = await responseCards.json();
-      setCards((prev) => ({ ...prev, data }));
+      setDeckCards(data);
     }
     getCards();
   }, []);
@@ -60,7 +61,7 @@ function App() {
     setScore({ computer: 0, user: 0 });
   }
 
-  console.log(cards);
+  console.log(deckCards);
   function draw() {
     if (cards.round < cards.remainingRounds) {
       setCards((prevState) => ({
