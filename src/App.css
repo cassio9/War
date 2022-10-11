@@ -7,14 +7,17 @@ body {
   letter-spacing: 0.1rem;
   font-size: 1.2em;
   display: grid;
-  grid-template-columns: minmax(400px, 80%);
+  grid-template-columns: minmax(400px, 100%);
   justify-content: center;
-  background-color: darkslategrey;
   align-items: center;
   height: 100vh;
+  background-image: url("./assets/table1.png");
 }
 
 .App {
+  align-self: center;
+  justify-self: center;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -22,14 +25,41 @@ body {
 }
 
 .game-container {
-  background-image: url("./assets/table1.png");
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: 2px solid black;
-  border-radius: 20px;
-  padding: 20px;
+  border-radius: 10px;
+  padding: 2%;
+  margin: 3%;
+}
+
+.game-start-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  border-radius: 10px;
+  padding: 2%;
+  height: 90vh;
+  width: 80%;
+}
+
+.title-container {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.game-start-container h1 {
+  color: yellow;
+  font-size: 6rem;
+  text-align: center;
+}
+
+.game-start-container p,
+.game-start-container h2 {
+  max-width: 400px;
+  text-align: center;
 }
 
 .remaining {
@@ -49,20 +79,23 @@ body {
   border: 0;
 }
 
-.shuffle {
-  padding: 0.3em;
-  border-radius: 0 10px;
-  align-self: flex-start;
+.start-game-btn {
+  padding: 0.5em;
+  border-radius: 20px 1px;
+  width: 60%;
+  max-width: 200px;
+  margin-top: 3%;
 }
 
 .draw {
   bottom: 0;
-  width: 50%;
+  width: 300px;
   text-transform: uppercase;
   font-weight: 900;
-  letter-spacing: 0.3em;
+  letter-spacing: 0.1em;
   border-radius: 20px;
-  padding: 1em;
+  padding: 0.5em;
+  margin: 1em;
 }
 
 .main-container {
@@ -77,7 +110,6 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-bottom: 40px;
 }
 
 .card-slot {
@@ -87,16 +119,24 @@ body {
   margin: 0 auto;
   order: 1;
   border-radius: 5px;
+  margin-bottom: 20%;
 }
 
 .card-slot img {
   height: 120px;
 }
 
-.me-paragraph {
-  order: 2;
+.score-paragraph {
+  margin: 0 10px;
 }
 
+.scorePC-paragraph {
+  margin: -10px 10px 15px 10px;
+}
+
+.order-score {
+  order: 2;
+}
 .startWarning {
   text-align: center;
   margin: 0;
@@ -108,23 +148,59 @@ body {
   max-width: 100px;
 }
 
-@media (max-height: 650px) {
-  .main-container {
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 10%;
+.red {
+  background-color: rgba(240, 55, 55, 0.537);
+}
+.yellow-title {
+  color: yellow;
+}
+
+@media (min-height: 550px) and (min-width: 500px) {
+  body {
+    font-size: 1.7em;
+  }
+}
+
+@media (max-height: 700px) {
+  .slot-container {
+    flex-direction: row-reverse;
+    margin: 20px;
   }
 
-  .me-paragraph {
-    order: 1;
+  .card-slot {
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 400px) {
+  .slot-container {
+    flex-direction: column;
+    margin: 10px;
+  }
+
+  .score-paragraph {
+    margin: 20px;
   }
 }
 
 @media (orientation: landscape) {
-  .title {
-    margin: 0.5em 0 -0.5em 0;
-    font-size: 1.5em;
-    color: yellow;
+  .title-container {
+    margin: 0;
+  }
+
+  .draw {
+    margin: 0;
+  }
+
+  .slot-container {
+    margin: 3% 20px;
+  }
+
+  .start-game-btn {
+    margin-top: 1%;
+  }
+
+  .game-start-container h1 {
+    font-size: 2em;
   }
 }

@@ -1,21 +1,17 @@
 import { useEffect, useState } from "react";
-import { getWinner } from "./utils.js";
 import "./App.css";
 
 function App() {
   const [deckCards, setDeckCards] = useState("");
+  const [score, setScore] = useState({ computer: 0, user: 0 });
   const [cards, setCards] = useState({
     round: 0,
     remainingRounds: 5,
-    ComputerCardImg: "",
-    UserCardImg: "",
-    ComputerCard: "",
-    UserCard: "",
-    deckId: "",
+    computerCard: "",
+    userCard: "",
     isPlaying: false,
     isFinished: false,
   });
-  const [score, setScore] = useState({ computer: 0, user: 0 });
 
   useEffect(() => {
     async function getCards() {
@@ -30,97 +26,140 @@ function App() {
       setDeckCards(data);
     }
     getCards();
-  }, []);
-
-  useEffect(() => {
-    getWinner(cards.ComputerCard, cards.UserCard, setScore);
-    finishGame(cards.remainingCards, cards.isPlaying);
-  }, [cards.round]);
-
-  function finishGame(remainingCards, isPlaying) {
-    if (remainingCards == 0 && isPlaying) {
-      setCards({
-        ...cards,
-        isFinished: true,
-        isPlaying: false,
-      });
-    }
-  }
+  }, [cards.isFinished]);
 
   function resetGame() {
     setCards({
-      remainingCards: "",
-      ComputerCardImg: "",
-      UserCardImg: "",
-      ComputerCard: "",
-      UserCard: "",
-      deckId: "",
-      isPlaying: false,
+      computerCard: "",
+      userCard: "",
+      round: 0,
+      remainingRounds: 5,
+      isPlaying: true,
       isFinished: false,
     });
     setScore({ computer: 0, user: 0 });
   }
 
-  console.log(deckCards);
-  function draw() {
+  function drawCard() {
     if (cards.round < cards.remainingRounds) {
       setCards((prevState) => ({
         ...prevState,
         round: prevState.round + 1,
-        ComputerCardImg: cards.data.cards[`${cards.round}`].image,
-        UserCardImg: cards.data.cards[`${51 - cards.round}`].image,
-        ComputerCard: cards.data.cards[`${cards.round}`].value,
-        UserCard: cards.data.cards[`${51 - cards.round}`].value,
+        computerCard: deckCards.cards[`${cards.round}`],
+        userCard: deckCards.cards[`${51 - cards.round}`],
       }));
-      updateScore();
+    }
+    getRoundWinner(
+      deckCards.cards[`${cards.round}`].value,
+      deckCards.cards[`${51 - cards.round}`].value
+    );
+    if (cards.round + 1 === cards.remainingRounds) {
+      setCards((prevState) => ({
+        ...prevState,
+        isFinished: true,
+      }));
+      console.log("finished");
     }
   }
 
-  function updateScore() {
-    const roundWinner = getWinner(cards.ComputerCard, cards.UserCard);
-    if (roundWinner == "PC") {
+  function getRoundWinner(cardPC, cardUser) {
+    const valueOptions = [
+      "ACE",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "JACK",
+      "QUEEN",
+      "KING",
+    ];
+    const cardPCIndex = valueOptions.indexOf(cardPC);
+    const cardMeIndex = valueOptions.indexOf(cardUser);
+    if (cardPCIndex > cardMeIndex) {
       setScore((prevState) => ({
         ...prevState,
         computer: prevState.computer + 1,
       }));
     } else if (cardPCIndex < cardMeIndex) {
-      setScore((prevState) => ({ ...prevState, computer: prevState.user + 1 }));
-    } else {
-      console.log("draw");
+      setScore((prevState) => ({
+        ...prevState,
+        user: prevState.user + 1,
+      }));
     }
   }
 
   return (
     <div className="App">
-      <div className="game-container">
-        <div>
-          <button className="btn shuffle">Start Game</button>
-          <span className="remaining">
-            Round: {cards.round}/{cards.remainingRounds || 0}
-          </span>
+      {!cards.isPlaying ? (
+        <div className="game-start-container">
+          <div>
+            <h1>WAR</h1>
+            <h2>Game Play:</h2>
+            <p>
+              Each player reveals a card of their deck —this is a "battle"— and
+              the player with the higher card win the round.
+            </p>
+          </div>
+          <button
+            className="start-game-btn btn"
+            onClick={() => setCards((prev) => ({ ...prev, isPlaying: true }))}
+          >
+            Start Game
+          </button>
         </div>
+      ) : (
         <div className="main-container">
-          <div className="slot-container">
-            <p>PC: {score.computer}</p>
-            <div className="card-slot">
-              <img src={cards.ComputerCardImg} alt="" />
-            </div>
+          <div className="title-container">
+            <span className="remaining">
+              Round: {cards.round}/{cards.remainingRounds || 0}
+            </span>
+            <h1
+              id="title"
+              className={!cards.isFinished ? "title" : "title yellow-title"}
+            >
+              {score.computer > score.user && cards.isFinished
+                ? "PC WON !!"
+                : score.computer < score.user && cards.isFinished
+                ? "USER WON !!"
+                : score.computer == score.user && cards.isFinished
+                ? "TIE!!!!"
+                : "WAR!"}
+            </h1>
           </div>
           <div className="slot-container">
-            <p className="me-paragraph">User: {score.user}</p>
-            <div className="card-slot">
-              <img src={cards.UserCardImg} alt="" />
+            <div className="slot-container">
+              <p className="scorePC-paragraph ">
+                PC: <span style={{ color: "yellow" }}>{score.computer}</span>
+              </p>
+              <div className="card-slot">
+                <img src={cards.computerCard.image} alt="" />
+              </div>
+            </div>
+            <div className="slot-container">
+              <p className="score-paragraph order-score">
+                User: <span style={{ color: "yellow" }}>{score.user}</span>
+              </p>
+              <div className="card-slot">
+                <img src={cards.userCard.image} alt="" />
+              </div>
             </div>
           </div>
+          <button
+            className={!cards.isFinished ? "btn draw" : "btn draw red"}
+            id="draw-btn"
+            onClick={cards.isFinished ? resetGame : drawCard}
+          >
+            {cards.isFinished ? "RESTART" : "Draw"}
+          </button>
         </div>
-        <button className="btn draw" id="draw-btn" onClick={draw}>
-          {cards.isFinished ? "RESTART" : "Draw"}
-        </button>
-      </div>
+      )}
     </div>
   );
 }
 
 export default App;
-
-// FUNCTIONS
