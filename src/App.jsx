@@ -20,15 +20,13 @@ function App() {
 			);
 			const deckId = await responseDeckId.json();
 			const responseCards = await fetch(
-				`https://deckofcardsapi.com/api/deck/${deckId.deck_id}/draw/?count=52`
+				`https://deckofcardsapi.com/api/deck/${deckId.deck_id}/draw/?count=10`
 			);
 			const data = await responseCards.json();
 			setDeckCards(data);
 		}
 		getCards();
 	}, [cards.isFinished]);
-
-	console.log(deckCards);
 
 	function resetGame() {
 		setCards({
@@ -42,19 +40,21 @@ function App() {
 		setScore({ computer: 0, user: 0 });
 	}
 
+	console.log(deckCards);
+
 	function drawCard() {
 		if (cards.round < cards.remainingRounds) {
 			setCards((prevState) => ({
 				...prevState,
 				round: prevState.round + 1,
 				computerCard: deckCards.cards[`${cards.round}`],
-				userCard: deckCards.cards[`${51 - cards.round}`],
+				userCard: deckCards.cards[`${9 - cards.round}`],
 			}));
 		}
 		setTimeout(() => {
 			getRoundWinner(
 				deckCards.cards[`${cards.round}`].value,
-				deckCards.cards[`${51 - cards.round}`].value
+				deckCards.cards[`${9 - cards.round}`].value
 			);
 			if (cards.round + 1 === cards.remainingRounds) {
 				setCards((prevState) => ({
